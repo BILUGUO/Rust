@@ -151,3 +151,169 @@ println!("v[0] is: {}", v[0]);
     println!("{}", y);
 
 生命周期
+&mut i32和&'a mut i32，他们是一样的，只是后者在&和mut i32之间夹了一个'a生命周期。
+&mut i32读作“一个i32的可变引用”，而&'a mut i32读作“一个带有生命周期'a的i32的可变引用”。
+
+
+
+结构体（struct）
+
+// 单元结构体
+struct Nil;
+
+// 元组结构体
+struct Pair(i32, f32);
+
+// 带有两个字段的结构体
+struct Point {
+    x: f32,
+    y: f32,
+}
+
+// 结构体可以作为另一个结构体的字段
+#[allow(dead_code)]
+struct Rectangle {
+    p1: Point,
+    p2: Point,
+}
+
+fn main() {
+    // 实例化结构体 `Point`
+    let point: Point = Point { x: 0.3, y: 0.4 };
+
+    // 访问 point 的字段
+    println!("point coordinates: ({}, {})", point.x, point.y);
+
+    // 使用 `let` 绑定来解构 point
+    let Point { x: my_x, y: my_y } = point;
+
+    let _rectangle = Rectangle {
+        // 结构体的实例化也是一个表达式
+        p1: Point { x: my_y, y: my_x },
+        p2: point,
+    };
+
+    // 实例化一个单元结构体
+    let _nil = Nil;
+
+    // 实例化一个元组结构体
+    let pair = Pair(1, 0.1);
+
+    // 访问元组结构体的字段
+    println!("pair contains {:?} and {:?}", pair.0, pair.1);
+
+    // 解构一个元组结构体
+    let Pair(integer, decimal) = pair;
+
+    println!("pair contains {:?} and {:?}", integer, decimal);
+}
+
+枚举（enum）：enum 关键字允许创建一个代表数个可能变量的数据的类型
+// 隐藏未使用代码警告的属性。
+#![allow(dead_code)]
+
+// 创建一个 `enum` （枚举）来划分人的类别。注意命名和类型的信息是如何一起
+// 明确规定变量的：
+// `Engineer != Scientist` 和 `Height(i32) != Weight(i32)`。每者都不相同且
+// 相互独立。
+enum Person {
+    // 一个 `enum` 可能是个 `unit-like`（类单元结构体），
+    Engineer,
+    Scientist,
+    // 或像一个元组结构体，
+    Height(i32),
+    Weight(i32),
+    // 或像一个普通的结构体。
+    Info { name: String, height: i32 }
+}
+
+// 此函数将一个 `Person` enum 作为参数，无返回值。
+fn inspect(p: Person) {
+    // `enum` 的使用必须覆盖所有情形（无可辩驳的），所以使用 `match`
+    // 以分支方式覆盖所有类型。
+    match p {
+        Person::Engineer    => println!("Is engineer!"),
+        Person::Scientist       => println!("Is scientist!"),
+        // 从 `enum` 内部解构 `i`
+        Person::Height(i) => println!("Has a height of {}.", i),
+        Person::Weight(i) => println!("Has a weight of {}.", i),
+        // 将 `Info` 解构成 `name` 和 `height`。
+        Person::Info { name, height } => {
+            println!("{} is {} tall!", name, height);
+        },
+    }
+}
+
+fn main() {
+    let person   = Person::Height(18);
+    let amira    = Person::Weight(10);
+    // `to_owned()` 从一个字符串 slice 创建一个具有所有权的 `String`。
+    let dave     = Person::Info { name: "Dave".to_owned(), height: 72 };
+    let rebecca  = Person::Scientist;
+    let rohan    = Person::Engineer;
+
+    inspect(person);
+    inspect(amira);
+    inspect(dave);
+    inspect(rebecca);
+    inspect(rohan);
+}//END
+
+
+let x = 1;
+
+模式（match）
+match x {
+    //使用 | 匹配多个模式
+    1 | 2 => println!("one"),
+    2 => println!("two"),
+    3 => println!("three"),、
+    //_ 作为“任何类型”
+    _ => println!("anything"),
+}
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+//END
+
+let origin = Point { x: 0, y: 0};
+
+match origin {
+    //模式可以用来结构一个复合数据类型
+    //分别输出 Point 结构中的 x 与 y 的值
+    //也可以给 Point 结构中的 x 与 y 给出一个不同的标识符
+    Point { x: x1, y: y1 } => println!("({},{})", x1, y1),
+}
+//END
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let point = Point { x: 2, y: 3 };
+
+match point {
+    //如果只关系一部分的值，则可以使用..来忽略其他的标识符
+    Point { y, .. } => println!("x is {}", y),
+}
+//END
+
+let x = 5;
+
+match x {
+    //使用引用：ref  可变引用使用：ref mut
+    ref r => println!("Got a reference to {}", r),
+}
+//END
+
+let x = 1;
+
+match x {
+    //使用 ... 匹配一个范围的值
+    //使用 @ 把值绑定到一个标识符上
+    e @ 1 ... 5 => println!("got a range element {}", e),
+    _ => println!("anything"),
+}

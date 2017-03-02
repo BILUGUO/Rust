@@ -7,6 +7,7 @@ let 绑定
   let mut x = 5;  //可变
 当然也可以明确的指出来，只需要在将类型卸载（:）后面。
   let x:i32 = 5;
+//END
 
 函数
 1.在Rust中使用 fn 来声明函数。
@@ -16,17 +17,20 @@ let 绑定
   fn print(x:i32, y: i32) -> i32{
       x + y
   }
+//END
 
 语句与表达式
 1.变量声明语句：主要是指 let 语句。
 2.ltem语句：是指函数（function）、结构体（structure）、类型别名（type）、静态变量（static）、特质（trait）、实现（implementation）或模块（module）的声明。这些声明可以嵌套在任意块（block）中。
 3.表达式语句：由一个表达式和一个分号组成，即在表达式后面加一个分号就将一个表达式转变为了一个语句。所以，有多少种表达式，就有多少种表达式语句。
 4.语句始终返回一个()，这是一个 unit 类型。
+//END
 
 函数指针
   fn plus_one(i: i32) -> i32 { i + 1 }
   let f = plus_one;
   let six = f(5);
+//END
 
 元组：
 
@@ -66,6 +70,7 @@ let tuple = (1, "hello", 4.5, true);
 
 let (a, b, c, d) = tuple;
 println!("{:?}, {:?}, {:?}, {:?}", a, b, c, d);
+//END
 
 数组：
 
@@ -95,6 +100,7 @@ analyze_slice(&ys[1 .. 4]);
 
 8.越界的索引会引发 panic（中文意思是：惊恐、恐慌等意）
 println!("{}", xs[5]);
+//END
 
 
 所有权（Ownership）
@@ -109,6 +115,7 @@ let v2 = v;
 
 因为将所有权转移到了 v2 则 v 失去了对向量的所有权，当再次调用 v 的时候，向量跟随着 v2 一起被释放。
 println!("v[0] is: {}", v[0]);
+//END
 
 借用和引用
     1.&T类型为一个”引用“，而与其拥有这个资源，它借用了所有权。一个借用变量的绑定在它离开作用域时并不释放资源。
@@ -149,10 +156,12 @@ println!("v[0] is: {}", v[0]);
 
     //应为 x 与值一起被释放了，y没有可引用的值，所以会报错
     println!("{}", y);
+//END
 
 生命周期
 &mut i32和&'a mut i32，他们是一样的，只是后者在&和mut i32之间夹了一个'a生命周期。
 &mut i32读作“一个i32的可变引用”，而&'a mut i32读作“一个带有生命周期'a的i32的可变引用”。
+//END
 
 
 
@@ -207,6 +216,7 @@ fn main() {
 
     println!("pair contains {:?} and {:?}", integer, decimal);
 }
+//END
 
 枚举（enum）：enum 关键字允许创建一个代表数个可能变量的数据的类型
 // 隐藏未使用代码警告的属性。
@@ -257,7 +267,8 @@ fn main() {
     inspect(dave);
     inspect(rebecca);
     inspect(rohan);
-}//END
+}
+//END
 
 
 let x = 1;
@@ -317,3 +328,4 @@ match x {
     e @ 1 ... 5 => println!("got a range element {}", e),
     _ => println!("anything"),
 }
+//END
